@@ -1,4 +1,4 @@
-# Multimedia Process Syatem (MPS)
+# Multimedia Management Process System (MMPS)
 
 
 ## Background
