@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {  Typography, Layout,PageHeader, Button, Descriptions} from 'antd';
+import {  Typography, Layout,Tabs,Divider,Avatar} from 'antd';
 import axios from 'axios';
-const { Title } = Typography;
+const { Title ,Text} = Typography;
 const { Content ,Footer } = Layout;
-
+const { TabPane } = Tabs;
 
 export class uploadBTN extends Component {
 
@@ -16,32 +16,46 @@ export class uploadBTN extends Component {
         
         <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
           
-          <Content className="site-layout " style={{ padding: '0 50px', marginTop: 64 }}>
-          <Title level={3}>Project</Title>
-            <PageHeader
-              ghost={false}
-              title="Title"
-              subTitle="This is a subtitle"
-              extra={[
-                <Button key="3">Action</Button>,
-                <Button key="2">Edit</Button>,
-                <Button key="1" type="primary">
-                  Preview
-                </Button>,
-              ]}
-            >
-              <Descriptions size="small" column={3}>
-                <Descriptions.Item label="Created">Lili Qu</Descriptions.Item>
-                <Descriptions.Item label="Association">
-                  421421
-                </Descriptions.Item>
-                <Descriptions.Item label="Creation Time">2017-01-10</Descriptions.Item>
-                <Descriptions.Item label="Effective Time">2017-10-10</Descriptions.Item>
-                <Descriptions.Item label="Remarks">
-                  Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-              </Descriptions.Item>
-              </Descriptions>
-            </PageHeader>
+        <Content className="site-layout" style={{ padding: "0 150px", marginTop: -3 }}>
+            <div style={{ padding: 24, minHeight: 380, width: "100%", height: "100%" }}>
+              <Title level={3}>Project</Title>
+              <Divider />
+              <Tabs defaultActiveKey="1" >
+                <TabPane tab="My Project" key="1">
+                  <div>
+                    <table>
+                      <tr>
+                          <td rowSpan='2'>
+                          <Avatar.Group>
+                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar
+                              style={{
+                                backgroundColor: '#f56a00',
+                              }}
+                            >
+                              K
+                            </Avatar>
+                          </Avatar.Group>
+                          </td>
+                          <td style={{verticalAlign:'top'}}>
+                            <a style={{paddingLeft:15}}>Project Name</a>
+                          </td>
+                      </tr>
+                      <tr>
+                            <td style={{verticalAlign:'top',paddingLeft:15.5}}>
+                            <Text type="secondary">Dis</Text>
+                            </td>
+                      </tr>
+                    </table>
+               
+                </div>
+                
+                </TabPane>
+                <TabPane tab="Team Project" key="2">
+                  apple
+                </TabPane>
+              </Tabs>
+            </div>
           </Content>
          
         </Layout>
