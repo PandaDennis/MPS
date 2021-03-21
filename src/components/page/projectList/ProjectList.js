@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
-import {  Typography, Layout,Tabs,Divider,Avatar} from 'antd';
+import {  Typography, Layout,Tabs,Divider,Avatar,Spin} from 'antd';
 import axios from 'axios';
 const { Title ,Text} = Typography;
 const { Content ,Footer } = Layout;
 const { TabPane } = Tabs;
 
-export class uploadBTN extends Component {
+export class projectList extends Component {
+  constructor() {
+    super();
+    this.state = { project: [] };
+  }
 
+  componentDidMount() {
+    // Simple GET request using axios
+    axios.get('/project/findAll')
+        .then(
+          response => this.setState(
+            { 
+              project: response.data.message
+            }),
+            
+          );
+    }
+ 
 
   render() {
 
@@ -22,8 +38,46 @@ export class uploadBTN extends Component {
               <Divider />
               <Tabs defaultActiveKey="1" >
                 <TabPane tab="My Project" key="1">
-                  <div>
-                    <table>
+                {
+                  this.state.project.length === 0
+                    ? <Spin />
+                    : this.state.project.map(project => (
+                      <div key="{project}">
+                        <table width='180' >
+                          <tbody>
+                          <tr>
+                              <td rowSpan='2'>
+                              <Avatar.Group>
+                                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                <Avatar
+                                  style={{
+                                    backgroundColor: '#f56a00',
+                                  }}
+                                >
+                                  K
+                                </Avatar>
+                              </Avatar.Group>
+                              </td>
+                              <td style={{verticalAlign:'top'}}>
+                                <a style={{paddingLeft:15,color:'black'}} href='www.google.com'>
+                                  {project.project_name}
+                                </a>
+                              </td>
+                          </tr>
+                          <tr>
+                                <td style={{verticalAlign:'top',paddingLeft:15.5}}>
+                                <Text type="secondary">Dis</Text>
+                                </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                  
+                    </div>
+                    ))
+                }
+                  {/* <div>
+                    <table width='180'>
+                      <tbody>
                       <tr>
                           <td rowSpan='2'>
                           <Avatar.Group>
@@ -46,9 +100,10 @@ export class uploadBTN extends Component {
                             <Text type="secondary">Dis</Text>
                             </td>
                       </tr>
+                      </tbody>
                     </table>
                
-                </div>
+                </div> */}
                 
                 </TabPane>
                 <TabPane tab="Team Project" key="2">
@@ -67,4 +122,4 @@ export class uploadBTN extends Component {
 }
 
 
-export default uploadBTN
+export default projectList
