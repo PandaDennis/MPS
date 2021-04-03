@@ -3,7 +3,8 @@ import {BrowserRouter as Router , Switch, Route} from 'react-router-dom';
 import { Navbar ,Nav} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Upload from './components/Upload'
-import project_List from './components/page/projectList/ProjectList'
+import project from './components/project_management'
+
 
 import './App.css'
 
@@ -58,7 +59,7 @@ function App() {
           <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/upload" component={Upload} />
-          <Route path="/project" component={project_List} />
+          <Route path="/project" component={project} />
           </Switch>
         </div>  
     </Router>

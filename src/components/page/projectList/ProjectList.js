@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Typography, Layout,Tabs,Divider,Avatar,Spin} from 'antd';
+import { Button,Typography, Layout,Tabs,Avatar,Spin ,Row, Col} from 'antd';
 import axios from 'axios';
 const { Title ,Text} = Typography;
 const { Content ,Footer } = Layout;
@@ -8,7 +8,10 @@ const { TabPane } = Tabs;
 export class projectList extends Component {
   constructor() {
     super();
-    this.state = { project: [] };
+    this.state = ({ 
+      project: [],
+      dataDisplay:false
+    });
   }
 
   componentDidMount() {
@@ -20,28 +23,45 @@ export class projectList extends Component {
               project: response.data.message
             }),
             
-          );
+          )
+      
     }
+  
  
 
   render() {
 
-    // const { visible, loading } = this.state;
+    const { project } = this.state;
+   
     return (
       <>
-        
+        {this.props.dataDisplay === true &&
+            <div>if true show</div>
+        }
         <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
           
         <Content className="site-layout" style={{ padding: "0 150px", marginTop: -3 }}>
             <div style={{ padding: 24, minHeight: 380, width: "100%", height: "100%" }}>
-              <Title level={3}>Project</Title>
-              <Divider />
+              {/* <Title level={3}>Project</Title> */}
+              <div>
+                <Row>
+                  <Col span={8}><Title level={4}>Project</Title></Col>
+                  <Col span={8} style={{textAlign:"right"}} offset={8}>
+                  <Button type="dashed" href='/project/create'>
+                       Dashed
+                  </Button>
+                  </Col>
+                </Row>
+              </div>
+              <hr/>
+              {/* <Divider /> */}
               <Tabs defaultActiveKey="1" >
                 <TabPane tab="My Project" key="1">
                 {
-                  this.state.project.length === 0
+                  
+                  project.length === 0
                     ? <Spin />
-                    : this.state.project.map(project => (
+                    : project.map(project => (
                       <div key="{project}">
                         <table width='180' >
                           <tbody>
@@ -73,7 +93,7 @@ export class projectList extends Component {
                         </table>
                   
                     </div>
-                    ))
+                    )) 
                 }
                   {/* <div>
                     <table width='180'>
