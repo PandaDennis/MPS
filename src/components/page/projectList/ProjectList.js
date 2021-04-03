@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button,Typography, Layout,Tabs,Avatar,Spin ,Row, Col} from 'antd';
+import { Button,Typography, Layout,Tabs,Avatar,Spin ,Row, Col,Empty} from 'antd';
 import axios from 'axios';
 const { Title ,Text} = Typography;
 const { Content ,Footer } = Layout;
@@ -10,7 +10,7 @@ export class projectList extends Component {
     super();
     this.state = ({ 
       project: [],
-      dataDisplay:false
+      my_dataDisplay:false
     });
   }
 
@@ -18,12 +18,27 @@ export class projectList extends Component {
     // Simple GET request using axios
     axios.get('/project/findAll')
         .then(
-          response => this.setState(
-            { 
-              project: response.data.message
-            }),
-            
-          )
+          response => {
+            // console.log(response.data.message.length)
+            // console.log(response.data)
+            if(response.data.status === 1){
+              
+              this.setState({
+                my_dataDisplay:false
+              }) 
+            }else{
+              this.setState({
+                project: response.data,
+                my_dataDisplay:true
+              })
+            }
+            // this.setState(
+            //   { 
+            //     project: response.data.message
+            //   }),
+          })
+          
+          
       
     }
   
@@ -32,12 +47,113 @@ export class projectList extends Component {
   render() {
 
     const { project } = this.state;
-   
-    return (
-      <>
-        {this.props.dataDisplay === true &&
-            <div>if true show</div>
-        }
+    if(this.state.my_dataDisplay){
+      return (
+        <>
+         
+          <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
+            
+          <Content className="site-layout" style={{ padding: "0 150px", marginTop: -3 }}>
+              <div style={{ padding: 24, minHeight: 380, width: "100%", height: "100%" }}>
+                {/* <Title level={3}>Project</Title> */}
+                <div>
+                  <Row>
+                    <Col span={8}><Title level={4}>Project</Title></Col>
+                    <Col span={8} style={{textAlign:"right"}} offset={8}>
+                    <Button type="dashed" style={{ background: "red", borderColor: "yellow" }} href='/project/create'>
+                         Create
+                    </Button>
+                    </Col>
+                  </Row>
+                </div>
+                <hr/>
+                {/* <Divider /> */}
+                <Tabs defaultActiveKey="1" >
+                  <TabPane tab="My Project" key="1">
+                  {
+                    
+                    project.length === 0 && project.status !== 0
+                      ? <Spin />
+                      : project.message.map(project => (
+                        <div key="{project}">
+                          <table width='180' >
+                            <tbody>
+                            <tr>
+                                <td rowSpan='2'>
+                                <Avatar.Group>
+                                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                  <Avatar
+                                    style={{
+                                      backgroundColor: '#f56a00',
+                                    }}
+                                  >
+                                    K
+                                  </Avatar>
+                                </Avatar.Group>
+                                </td>
+                                <td style={{verticalAlign:'top'}}>
+                                  <a style={{paddingLeft:15,color:'black'}} href='www.google.com'>
+                                    {project.project_name}
+                                  </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                  <td style={{verticalAlign:'top',paddingLeft:15.5}}>
+                                  <Text type="secondary">Dis</Text>
+                                  </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                    
+                      </div>
+                      )) 
+                  }
+                    {/* <div>
+                      <table width='180'>
+                        <tbody>
+                        <tr>
+                            <td rowSpan='2'>
+                            <Avatar.Group>
+                              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                              <Avatar
+                                style={{
+                                  backgroundColor: '#f56a00',
+                                }}
+                              >
+                                K
+                              </Avatar>
+                            </Avatar.Group>
+                            </td>
+                            <td style={{verticalAlign:'top'}}>
+                              <a style={{paddingLeft:15}}>Project Name</a>
+                            </td>
+                        </tr>
+                        <tr>
+                              <td style={{verticalAlign:'top',paddingLeft:15.5}}>
+                              <Text type="secondary">Dis</Text>
+                              </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                 
+                  </div> */}
+                  
+                  </TabPane>
+                  <TabPane tab="Team Project" key="2">
+                    apple
+                  </TabPane>
+                </Tabs>
+              </div>
+            </Content>
+           
+          </Layout>
+  
+          <Footer style={{ textAlign: 'center' }}>MMPS ©2018 Created by Dennis,Power By </Footer>
+        </>
+      );
+    }else{
+      return(
+        <>
         <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
           
         <Content className="site-layout" style={{ padding: "0 150px", marginTop: -3 }}>
@@ -47,9 +163,9 @@ export class projectList extends Component {
                 <Row>
                   <Col span={8}><Title level={4}>Project</Title></Col>
                   <Col span={8} style={{textAlign:"right"}} offset={8}>
-                  <Button type="dashed" href='/project/create'>
-                       Dashed
-                  </Button>
+                  <Button type="primary"  href='/project/create'>
+                        New Project
+                    </Button>
                   </Col>
                 </Row>
               </div>
@@ -57,77 +173,12 @@ export class projectList extends Component {
               {/* <Divider /> */}
               <Tabs defaultActiveKey="1" >
                 <TabPane tab="My Project" key="1">
-                {
-                  
-                  project.length === 0
-                    ? <Spin />
-                    : project.map(project => (
-                      <div key="{project}">
-                        <table width='180' >
-                          <tbody>
-                          <tr>
-                              <td rowSpan='2'>
-                              <Avatar.Group>
-                                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                <Avatar
-                                  style={{
-                                    backgroundColor: '#f56a00',
-                                  }}
-                                >
-                                  K
-                                </Avatar>
-                              </Avatar.Group>
-                              </td>
-                              <td style={{verticalAlign:'top'}}>
-                                <a style={{paddingLeft:15,color:'black'}} href='www.google.com'>
-                                  {project.project_name}
-                                </a>
-                              </td>
-                          </tr>
-                          <tr>
-                                <td style={{verticalAlign:'top',paddingLeft:15.5}}>
-                                <Text type="secondary">Dis</Text>
-                                </td>
-                          </tr>
-                          </tbody>
-                        </table>
-                  
-                    </div>
-                    )) 
-                }
-                  {/* <div>
-                    <table width='180'>
-                      <tbody>
-                      <tr>
-                          <td rowSpan='2'>
-                          <Avatar.Group>
-                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                            <Avatar
-                              style={{
-                                backgroundColor: '#f56a00',
-                              }}
-                            >
-                              K
-                            </Avatar>
-                          </Avatar.Group>
-                          </td>
-                          <td style={{verticalAlign:'top'}}>
-                            <a style={{paddingLeft:15}}>Project Name</a>
-                          </td>
-                      </tr>
-                      <tr>
-                            <td style={{verticalAlign:'top',paddingLeft:15.5}}>
-                            <Text type="secondary">Dis</Text>
-                            </td>
-                      </tr>
-                      </tbody>
-                    </table>
-               
-                </div> */}
+                
+                  <Empty />
                 
                 </TabPane>
                 <TabPane tab="Team Project" key="2">
-                  apple
+                  <Empty />
                 </TabPane>
               </Tabs>
             </div>
@@ -137,7 +188,9 @@ export class projectList extends Component {
 
         <Footer style={{ textAlign: 'center' }}>MMPS ©2018 Created by Dennis,Power By </Footer>
       </>
-    );
+      );
+    }
+    
   }
 }
 
