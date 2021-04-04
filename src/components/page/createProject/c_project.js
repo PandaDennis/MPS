@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 import './c_project.css'
-
+import { Layout, Menu, Breadcrumb ,Form, Input, Button } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+
+const { Header, Content, Footer } = Layout;
 //For muilt select
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
-const animatedComponents = makeAnimated();
+// import Select from 'react-select';
+// import makeAnimated from 'react-select/animated';
+// const animatedComponents = makeAnimated();
 const uuid = uuidv4();
 const useroptions = [
     { value: '1123', label: 'Dennis' },
@@ -95,7 +98,7 @@ class create_project extends Component{
                 })
             }else {
                 swal({
-                    icon: "success",
+                    icon: 'error',
                     text:"Error"
                 })
             }
@@ -121,8 +124,34 @@ render(){
     
     return (
         <>
-
-            <div className="container">
+        <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
+        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+            
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+                Content
+                <Form  name="horizontal_login" layout="inline" onSubmit={this.submitHandler}>
+                <Form.Item
+                    name="username"
+                    rules={[{ required: true, message: 'Please input your username!' }]}
+                >
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    type="password"
+                    placeholder="Password"
+                    />
+                </Form.Item>
+                
+                </Form>
+            </div>
+            </Content>
+           
+            {/* <div className="container">
 
             <form onSubmit={this.submitHandler}>
                 <p className="deftvalue">Project ID</p>
@@ -198,10 +227,10 @@ render(){
                 
             
             
-            </div>
+            </div> */}
 
                
-
+        </Layout>
 
 
                 
