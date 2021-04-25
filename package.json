@@ -18,6 +18,7 @@
     "react-scripts": "4.0.1",
     "react-select": "^4.0.2",
     "semantic-ui-react": "^2.0.3",
+    "sweetalert2": "^10.16.6",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },

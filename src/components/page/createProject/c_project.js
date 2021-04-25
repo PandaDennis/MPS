@@ -1,31 +1,19 @@
 import React, { Component } from 'react';
 import './c_project.css'
-import { Layout, Form, Input, Button ,Row, Col,Typography} from 'antd';
+import Swal from 'sweetalert2'
+import { Layout, Form, Input, Button ,Row, Col,Typography,Select,} from 'antd';
 
-import { HddOutlined} from '@ant-design/icons';
+
+
 import { v4 as uuidv4 } from 'uuid';
-const { Title ,Text} = Typography;
+const { Option } = Select;
+const { Title } = Typography;
 const {  Content } = Layout;
 //For muilt select
 // import Select from 'react-select';
 // import makeAnimated from 'react-select/animated';
 // const animatedComponents = makeAnimated();
 const uuid = uuidv4();
-const useroptions = [
-    { value: '1123', label: 'Dennis' },
-    { value: '1129', label: 'Ben' },
-    { value: '1128', label: 'Eunji' },
-    { value: '1125', label: 'bomi' }
-  ]
-
-
-const userGroupoptions = [
-{ value: '1123', label: 'Dennis' },
-{ value: '1129', label: 'photographerGroup1' },
-{ value: '1130', label: 'photographerGroup2' },
-
-
-]
 
 
 
@@ -38,7 +26,7 @@ class create_project extends Component{
         this.state = {
             projectid: uuid,
             projectname:'',
-            master:'',
+            owner:'',
             projectUser:[],
             projectGroup:[],
             projectStatus: true,
@@ -46,48 +34,56 @@ class create_project extends Component{
 
         }
     }
+    provinceData = ['Zhejiang', 'Jiangsu'];
     
-    changeHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
-        console.log(this.state)
+    changeState = (e) =>{
+        this.setState({projectname: e.project.projectname})
+        this.setState({owner: e.project.owner})
+        
+        
     }
-    handle_M_SelectChange = projectUser => {
-        
-        var newProjectUsers = new Array(projectUser.length);
-        if(projectUser.length > 0){
-            for(var i=0; i<projectUser.length;i++){
-                console.log(projectUser[i].value)
-                newProjectUsers[i] = projectUser[i].value
-            }
-        }else{
-            newProjectUsers = {};
-        }
-        //var result = JSON.stringify(newProjectUser)
-        this.setState({projectUser:newProjectUsers});
-        
-    };
-    handle_M_SelectChangeOnGroup = projectGroup => {
-        var newProjectUsersgroups = new Array(projectGroup.length);
-        if(projectGroup.length > 0){
-            for(var i=0; i<projectGroup.length;i++){
-                console.log(projectGroup[i].value)
-                newProjectUsersgroups[i] = projectGroup[i].value
-            }
-        }else{
-            newProjectUsersgroups = {};
-        }
-        //var result = JSON.stringify(newProjectUser)
-        this.setState({projectGroup:newProjectUsersgroups});
-        
-    };
+    // onFinish = (values) => {
+    //     console.log(values);
+    //     this.submitHandler(); 
+    //   };
 
+    
+   
 
     submitHandler = e => {
-        console.log(this.state)
-    //    const axios = require('axios');
-    //     e.preventDefault()
-    //     console.log(this.state)
-        
+        Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+          )
+       const axios = require('axios');
+        //e.preventDefault()
+        console.log(JSON.stringify(this.state))
+        this.changeState(e);
+        axios.post('/project/postsTest', 
+            this.state
+        )
+          .then(function (response) {
+            console.log(response);
+            if(response.data.status === 0 && response.status === 200){
+                Swal.fire(
+                    'Good job!',
+                    'You clicked the button!',
+                    'success'
+                  )
+                
+            }else {
+                console.log("Error")
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+            Swal.fire(
+                'Good job!',
+                'You clicked the button!',
+                'success'
+              )
+          });
         // axios.post('/project/create', 
         //     this.state
         // )
@@ -114,15 +110,11 @@ class create_project extends Component{
         //   });
     } 
 
-   
- 
-
     
-    
+  
     
    
 render(){
-    const {projectid,projectname,master} = this.state;
     
     return (
         <>
@@ -135,139 +127,45 @@ render(){
                   </Row>
                 <hr/>
                 <Form  
-                initialValues={{ ProjectID: projectid}}
-                name="horizontal_login" 
-                layout="inline" 
-                onSubmit={this.submitHandler}>
-                {/* <Form.Item
-                    name="ProjectID"
+                name="nest-messages" 
+                onFinish={this.submitHandler} 
                 >
-                    <Input
-                    style={{width:'150%'}}
-                    placeholder="Project Name" 
-                    name="projectname" 
-                    required
-                    disabled
-                    svalue={uuidv4()}
-                    onChange={this.changeHandler}
-                    
-                    />
-                </Form.Item> */}
                 <Form.Item
-                    name="username"
-                    rules={[{ required: true, message: 'Please input New Project Name' }]}
+                    name={['project', 'projectname']}
+                    label="Name"
+                    rules={[
+                    {
+                        required: true,
+                    },
+                    ]}
                 >
-                    <Input 
-                    prefix={<HddOutlined className="site-form-item-icon" />} 
-                    placeholder="Project Name" 
-                    name="projectname" 
-                    required
-                    value={projectname}
-                    onChange={this.changeHandler}
-                    
-                    />
+                    <Input />
                 </Form.Item>
-                {/* <Form.Item
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                    <Input
-                    prefix={<LockOutlined className="site-form-item-icon" />}
-                    type="password"
-                    placeholder="Password"
-                    />
-                </Form.Item> */}
-                 
+                <Form.Item label="Owner" name={['project', 'owner']}> 
+                    <Select>
+                        {/* <Select.Option value="demo">Demo</Select.Option> */}
+                        {this.provinceData.map(province => (
+                        <Option key={province}>{province}</Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                
+                <Form.Item >
+                    <Button type="primary" htmlType="submit">
+                    Submit
+                    </Button>
+                </Form.Item>
                 </Form>
             </div>
             </Content>
            
-            {/* <div className="container">
-
-            <form onSubmit={this.submitHandler}>
-                <p className="deftvalue">Project ID</p>
-                <div className="group"> 
-                <input 
-                type="text"
-                name="projectid" 
-                required 
-                disabled
-                defaultValue={projectid}
-                //value={uuidv4()}
-                onChange={this.changeHandler}
-                />
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                
-                </div>
-                
-                <div className="group">      
-                <input 
-                type="text" 
-                name="projectname" 
-                required
-                value={projectname}
-                onChange={this.changeHandler}
-                />
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                <label>Project Name</label>
-                </div>
-
-                <div className="group">      
-                <input 
-                type="text" 
-                name="master" 
-                required
-                value={master}
-                onChange={this.changeHandler}
-                />
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                <label>Master</label>
-                </div>
-                <div>
-                <p className="deftvalue">Project User</p>
-                <Select 
-                isMulti
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                onChange={this.handle_M_SelectChange}
-                options={useroptions} />
-                </div>
-                <div>
-                <p className="deftvalue">Project Group</p>
-                <Select 
-                isMulti
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                onChange={this.handle_M_SelectChangeOnGroup}
-                options={userGroupoptions} />
-                </div>
-                
-                <br/><br/>
-                
-               
-                
-
-                <button type = "submit">Submit</button>
-
-                
-                
-            </form>
-                
-            
-            
-            </div> */}
-
-               
         </Layout>
 
 
                 
 
 
-        </>
+         </>
       );
 }
     
