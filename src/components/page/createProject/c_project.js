@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import swal from 'sweetalert';
 import './c_project.css'
-import { Layout, Menu, Breadcrumb ,Form, Input, Button } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { v4 as uuidv4 } from 'uuid';
+import { Layout, Form, Input, Button ,Row, Col,Typography} from 'antd';
 
-const { Header, Content, Footer } = Layout;
+import { HddOutlined} from '@ant-design/icons';
+import { v4 as uuidv4 } from 'uuid';
+const { Title ,Text} = Typography;
+const {  Content } = Layout;
 //For muilt select
 // import Select from 'react-select';
 // import makeAnimated from 'react-select/animated';
@@ -49,6 +49,7 @@ class create_project extends Component{
     
     changeHandler = (e) =>{
         this.setState({[e.target.name]: e.target.value})
+        console.log(this.state)
     }
     handle_M_SelectChange = projectUser => {
         
@@ -82,34 +83,35 @@ class create_project extends Component{
 
 
     submitHandler = e => {
-       const axios = require('axios');
-        e.preventDefault()
         console.log(this.state)
+    //    const axios = require('axios');
+    //     e.preventDefault()
+    //     console.log(this.state)
         
-        axios.post('/project/create', 
-            this.state
-        )
-          .then(function (response) {
-            //console.log(response);
-            if(response.data.status === 0 && response.status === 200){
-                swal("Success To Create Project", "You clicked the button!", "success")
-                .then(()=>{
-                    window.location.href = 'https://www.google.com/';
-                })
-            }else {
-                swal({
-                    icon: 'error',
-                    text:"Error"
-                })
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-            swal({
-                icon: "error",
-                text:"Error,please try again "
-            })
-          });
+        // axios.post('/project/create', 
+        //     this.state
+        // )
+        //   .then(function (response) {
+        //     //console.log(response);
+        //     if(response.data.status === 0 && response.status === 200){
+        //         swal("Success To Create Project", "You clicked the button!", "success")
+        //         .then(()=>{
+        //             window.location.href = 'https://www.google.com/';
+        //         })
+        //     }else {
+        //         swal({
+        //             icon: 'error',
+        //             text:"Error"
+        //         })
+        //     }
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //     swal({
+        //         icon: "error",
+        //         text:"Error,please try again "
+        //     })
+        //   });
     } 
 
    
@@ -128,15 +130,44 @@ render(){
         <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
             
             <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
-                Content
-                <Form  name="horizontal_login" layout="inline" onSubmit={this.submitHandler}>
+                <Row>
+                    <Col span={8}><Title level={4}>Create Project</Title></Col>
+                  </Row>
+                <hr/>
+                <Form  
+                initialValues={{ ProjectID: projectid}}
+                name="horizontal_login" 
+                layout="inline" 
+                onSubmit={this.submitHandler}>
+                {/* <Form.Item
+                    name="ProjectID"
+                >
+                    <Input
+                    style={{width:'150%'}}
+                    placeholder="Project Name" 
+                    name="projectname" 
+                    required
+                    disabled
+                    svalue={uuidv4()}
+                    onChange={this.changeHandler}
+                    
+                    />
+                </Form.Item> */}
                 <Form.Item
                     name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[{ required: true, message: 'Please input New Project Name' }]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                    <Input 
+                    prefix={<HddOutlined className="site-form-item-icon" />} 
+                    placeholder="Project Name" 
+                    name="projectname" 
+                    required
+                    value={projectname}
+                    onChange={this.changeHandler}
+                    
+                    />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
@@ -145,8 +176,8 @@ render(){
                     type="password"
                     placeholder="Password"
                     />
-                </Form.Item>
-                
+                </Form.Item> */}
+                 
                 </Form>
             </div>
             </Content>
