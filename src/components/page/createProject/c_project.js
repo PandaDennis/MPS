@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'
 import './c_project.css';
 import { Layout, Form, Input, Button, Row, Col, Typography, Select, Modal } from 'antd';
@@ -12,15 +12,12 @@ const { Content } = Layout;
 
 
 
-const changeOwner = true;
+
 const uuid = uuidv4();
-const userOption = [];
 
 
-function readfouser(){
-    userOption.push("{label: 'Apple',value: 'apple',},")
-    console.log(userOption);
-}
+
+
 
 const submitHandler = (values) => {
     const axios = require('axios');
@@ -71,19 +68,33 @@ function showConfirm() {
 }
 
 function handleChange(value) {
-    if(value == 'Change'){
+    console.log("First "+value);
+    if (value === 'Change') {
         showConfirm()
     }
     console.log(value);
 }
-
+// function readfouser() {
+//     userOption.push("{label: 'orange',value: 'orange_Test'},")
+//     console.log(userOption);
+// }
 function Create_project() {
-    const [disabled, setDisabled] = useState();
+    const [userOption, setuserOption] = useState([]);
+
+    // const userOption = [{ label: 'Apple', value: 'apple_Test' }];
+  
+
+
     useEffect(() => {
-        
-        readfouser();
-      }, []);
-    
+        //setuserlist("{label: 'orange',value: 'orange_Test'}")
+        userOption.push("{label: 'orange',value: 'orange_Test'},");
+        console.log(typeof userOption)
+      }, [])
+
+
+    //   {userOption.map(userOption => (
+    //     <Option key={userOption.value}>{userOption.label}</Option>
+    // ))}
 
 
     //   showConfirm =>{
@@ -99,9 +110,6 @@ function Create_project() {
     //       },
     //     });
     //   }
-
-
-
 
     return (
         <>
@@ -140,13 +148,18 @@ function Create_project() {
                                 ]}
 
                             >
-                                <Select onChange={handleChange}>
+                                <Select onChange={handleChange} >
 
 
                                     <Select.OptGroup label="Owner User">
-                                        {userOption.map(userOption => (
-                                            <Option key={userOption.value}>{userOption.label}</Option>
-                                        ))}
+                                    {userOption.map(item => <Select.Option value={item.value}>{item.label}</Select.Option>)}
+                                    {/* {userlist.map(userOption => (
+                                        <Option key={userOption.value}>{userOption.label}</Option>
+                                    ))} */}
+                                    {
+                                        console.log("For Testing !!!!!!!!!"+userOption)
+                                    }
+
                                     </Select.OptGroup>
                                     <Select.OptGroup label="Other User">
                                         <Select.Option key="Change" >Change User</Select.Option>
@@ -159,9 +172,9 @@ function Create_project() {
                                 {/* <Button onClick={showConfirm}>Confirm</Button> */}
 
                             </Form.Item>
-                            <Form.Item>
+                            {/* <Form.Item>
                                 <Button onClick={showConfirm}>Confirm</Button>
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <Form.Item >
                                 <Button type="primary" htmlType="submit">
@@ -179,6 +192,10 @@ function Create_project() {
 
         </>
     );
+
+
+
+
 }
 
 
