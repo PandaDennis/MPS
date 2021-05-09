@@ -1,176 +1,191 @@
-import React, { Component } from 'react';
-import './c_project.css'
+import React, { useState , useEffect} from 'react';
 import Swal from 'sweetalert2'
-import { Layout, Form, Input, Button ,Row, Col,Typography,Select,} from 'antd';
-
-
+import './c_project.css';
+import { Layout, Form, Input, Button, Row, Col, Typography, Select, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { v4 as uuidv4 } from 'uuid';
+const { confirm } = Modal;
 const { Option } = Select;
 const { Title } = Typography;
-const {  Content } = Layout;
+const { Content } = Layout;
+
+
+
+const changeOwner = true;
+const uuid = uuidv4();
+const userOption = [];
+
+
+function readfouser(){
+    userOption.push("{label: 'Apple',value: 'apple',},")
+    console.log(userOption);
+}
+
+const submitHandler = (values) => {
+    const axios = require('axios');
+    var subMitData = [];
+
+    console.log(typeof values);
+    console.log(values);
+    subMitData.push(values.project);
+    console.log(subMitData);
+
+    axios.post('/project/postsTest',
+        subMitData
+    )
+        .then(function (response) {
+            console.log("Testing :" + response);
+            if (response.data.status === 0 && response.status === 200) {
+                console.log(response);
+
+            } else {
+                console.log("Error")
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+
+        });
+};
+
+
 //For muilt select
 // import Select from 'react-select';
 // import makeAnimated from 'react-select/animated';
 // const animatedComponents = makeAnimated();
-const uuid = uuidv4();
 
+function showConfirm() {
 
+    confirm({
+        title: 'Do you Want to delete these items?',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Some descriptions',
+        onOk() {
+            console.log('OK and change');
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
+}
 
-
-
-class create_project extends Component{
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-            projectid: uuid,
-            projectname:'',
-            owner:'',
-            projectUser:[],
-            projectGroup:[],
-            projectStatus: true,
-            fileDir: '/'+uuid,
-
-        }
+function handleChange(value) {
+    if(value == 'Change'){
+        showConfirm()
     }
-    provinceData = ['Zhejiang', 'Jiangsu'];
-    
-    changeState = (e) =>{
-        this.setState({projectname: e.project.projectname})
-        this.setState({owner: e.project.owner})
+    console.log(value);
+}
+
+function Create_project() {
+    const [disabled, setDisabled] = useState();
+    useEffect(() => {
         
-        
-    }
-    // onFinish = (values) => {
-    //     console.log(values);
-    //     this.submitHandler(); 
-    //   };
+        readfouser();
+      }, []);
+    
 
-    
-   
 
-    submitHandler = e => {
-        Swal.fire(
-            'Good job!',
-            'You clicked the button!',
-            'success'
-          )
-       const axios = require('axios');
-        //e.preventDefault()
-        console.log(JSON.stringify(this.state))
-        this.changeState(e);
-        axios.post('/project/postsTest', 
-            this.state
-        )
-          .then(function (response) {
-            console.log(response);
-            if(response.data.status === 0 && response.status === 200){
-                Swal.fire(
-                    'Good job!',
-                    'You clicked the button!',
-                    'success'
-                  )
-                
-            }else {
-                console.log("Error")
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-            Swal.fire(
-                'Good job!',
-                'You clicked the button!',
-                'success'
-              )
-          });
-        // axios.post('/project/create', 
-        //     this.state
-        // )
-        //   .then(function (response) {
-        //     //console.log(response);
-        //     if(response.data.status === 0 && response.status === 200){
-        //         swal("Success To Create Project", "You clicked the button!", "success")
-        //         .then(()=>{
-        //             window.location.href = 'https://www.google.com/';
-        //         })
-        //     }else {
-        //         swal({
-        //             icon: 'error',
-        //             text:"Error"
-        //         })
-        //     }
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //     swal({
-        //         icon: "error",
-        //         text:"Error,please try again "
-        //     })
-        //   });
-    } 
+    //   showConfirm =>{
+    //     confirm({
+    //       title: 'Do you Want to delete these items?',
+    //       icon: <ExclamationCircleOutlined />,
+    //       content: 'Some descriptions',
+    //       onOk() {
+    //         console.log('OK');
+    //       },
+    //       onCancel() {
+    //         console.log('Cancel');
+    //       },
+    //     });
+    //   }
 
-    
-  
-    
-   
-render(){
-    
+
+
+
     return (
         <>
-        <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
-        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
-            
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
-                <Row>
-                    <Col span={8}><Title level={4}>Create Project</Title></Col>
-                  </Row>
-                <hr/>
-                <Form  
-                name="nest-messages" 
-                onFinish={this.submitHandler} 
-                >
-                <Form.Item
-                    name={['project', 'projectname']}
-                    label="Name"
-                    rules={[
-                    {
-                        required: true,
-                    },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item label="Owner" name={['project', 'owner']}> 
-                    <Select>
-                        {/* <Select.Option value="demo">Demo</Select.Option> */}
-                        {this.provinceData.map(province => (
-                        <Option key={province}>{province}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                
-                <Form.Item >
-                    <Button type="primary" htmlType="submit">
-                    Submit
-                    </Button>
-                </Form.Item>
-                </Form>
-            </div>
-            </Content>
-           
-        </Layout>
+            <Layout style={{ position: 'fixed', zIndex: 1, width: '100%', height: '100%' }}>
+                <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+
+                    <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+                        <Row>
+                            <Col span={8}><Title level={4}>Create Project</Title></Col>
+                        </Row>
+                        <hr />
+                        <Form
+                            name="nest-messages"
+                            onFinish={submitHandler}
+                        >
+                            <Form.Item
+                                name={['project', 'projectname']}
+                                label="Name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input the Project Name',
+                                    },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Owner"
+                                name={['project', 'owner']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please Select Owner',
+                                    },
+                                ]}
+
+                            >
+                                <Select onChange={handleChange}>
 
 
-                
+                                    <Select.OptGroup label="Owner User">
+                                        {userOption.map(userOption => (
+                                            <Option key={userOption.value}>{userOption.label}</Option>
+                                        ))}
+                                    </Select.OptGroup>
+                                    <Select.OptGroup label="Other User">
+                                        <Select.Option key="Change" >Change User</Select.Option>
+                                    </Select.OptGroup>
 
 
-         </>
-      );
+                                </Select>
+
+
+                                {/* <Button onClick={showConfirm}>Confirm</Button> */}
+
+                            </Form.Item>
+                            <Form.Item>
+                                <Button onClick={showConfirm}>Confirm</Button>
+                            </Form.Item>
+
+                            <Form.Item >
+                                <Button type="primary" htmlType="submit">
+                                    Submit
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </Content>
+
+            </Layout>
+
+
+
+
+        </>
+    );
 }
-    
-
-}
 
 
-export default create_project
+
+
+
+
+
+
+export default Create_project
