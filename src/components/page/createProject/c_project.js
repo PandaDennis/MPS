@@ -5,6 +5,7 @@ import { Layout, Form, Input, Button, Row, Col, Typography, Select, Modal } from
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 const { confirm } = Modal;
 const { Option } = Select;
 const { Title } = Typography;
@@ -21,10 +22,8 @@ const uuid = uuidv4();
 
 const submitHandler = (values) => {
     const axios = require('axios');
-    var subMitData = [];
-
-    console.log(typeof values);
-    console.log(values);
+    var subMitData = new Array();
+   
     subMitData.push(values.project);
     console.log(subMitData);
 
@@ -47,69 +46,81 @@ const submitHandler = (values) => {
 };
 
 
-//For muilt select
-// import Select from 'react-select';
-// import makeAnimated from 'react-select/animated';
-// const animatedComponents = makeAnimated();
 
-function showConfirm() {
 
-    confirm({
-        title: 'Do you Want to delete these items?',
-        icon: <ExclamationCircleOutlined />,
-        content: 'Some descriptions',
-        onOk() {
-            console.log('OK and change');
-        },
-        onCancel() {
-            console.log('Cancel');
-        },
-    });
-}
-
-function handleChange(value) {
-    console.log("First "+value);
-    if (value === 'Change') {
-        showConfirm()
-    }
-    console.log(value);
-}
-// function readfouser() {
-//     userOption.push("{label: 'orange',value: 'orange_Test'},")
-//     console.log(userOption);
-// }
 function Create_project() {
-    const [userOption, setuserOption] = useState([]);
-
-    // const userOption = [{ label: 'Apple', value: 'apple_Test' }];
-  
-
-
+    const [projectownUser, setprojectownUser] = useState([])
+    const [changest, setchangest] = useState(false)
     useEffect(() => {
-        //setuserlist("{label: 'orange',value: 'orange_Test'}")
-        userOption.push("{label: 'orange',value: 'orange_Test'},");
-        console.log(typeof userOption)
-      }, [])
+        axios
+            .get('https://jsonplaceholder.typicode.com/users')
+            .then(res => {
+                setprojectownUser(res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            
+    }, [])
+    const handleChange = (value) => {
+        if (value === 'Change' && changest === false) {
+            showConfirm("other")
+        }
+        if (value === 'Change' && changest == true) {
+            showConfirm("Back")
+        }
 
+    }
+    const showConfirm = (type) => {
+        if (type === 'other') {
+            confirm({
+                title: 'Do you Change to change these items?',
+                icon: <ExclamationCircleOutlined />,
+                content: 'Some descriptions',
+                onOk() {
+                    console.log('OK and change');
+                    axios
+                        .get('https://jsonplaceholder.typicode.com/comments?postId=1')
+                        .then(res => {
+                            console.log("applwe(Test1): " + JSON.stringify(res.data))
+                            setprojectownUser(res.data)
+                            setchangest(true)
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                },
+                onCancel() {
+                    console.log('Cancel');
 
-    //   {userOption.map(userOption => (
-    //     <Option key={userOption.value}>{userOption.label}</Option>
-    // ))}
+                },
+            });
+        } else if (type === 'Back') {
+            confirm({
+                title: 'Do you go back to change these items?',
+                icon: <ExclamationCircleOutlined />,
+                content: 'Some descriptions',
+                onOk() {
+                    console.log('OK and change');
+                    axios
+                        .get('https://jsonplaceholder.typicode.com/users')
+                        .then(res => {
+                            setprojectownUser(res.data)
+                            setchangest(false)
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                },
+                onCancel() {
+                    console.log('Cancel');
 
+                },
+            });
 
-    //   showConfirm =>{
-    //     confirm({
-    //       title: 'Do you Want to delete these items?',
-    //       icon: <ExclamationCircleOutlined />,
-    //       content: 'Some descriptions',
-    //       onOk() {
-    //         console.log('OK');
-    //       },
-    //       onCancel() {
-    //         console.log('Cancel');
-    //       },
-    //     });
-    //   }
+        }
+
+    }
 
     return (
         <>
@@ -126,6 +137,19 @@ function Create_project() {
                             onFinish={submitHandler}
                         >
                             <Form.Item
+                                name={['project', 'projectid']}
+                                label="Project ID"
+                                initialValue = {uuid}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input the Project Name',
+                                    },
+                                ]}
+                            >
+                                <Input disabled={true}/>
+                            </Form.Item>
+                            <Form.Item
                                 name={['project', 'projectname']}
                                 label="Name"
                                 rules={[
@@ -135,7 +159,7 @@ function Create_project() {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <Input/>
                             </Form.Item>
                             <Form.Item
                                 label="Owner"
@@ -148,33 +172,18 @@ function Create_project() {
                                 ]}
 
                             >
-                                <Select onChange={handleChange} >
-
-
+                                <Select onChange={handleChange} defaultActiveFirstOption={true}>
                                     <Select.OptGroup label="Owner User">
-                                    {userOption.map(item => <Select.Option value={item.value}>{item.label}</Select.Option>)}
-                                    {/* {userlist.map(userOption => (
-                                        <Option key={userOption.value}>{userOption.label}</Option>
-                                    ))} */}
-                                    {
-                                        console.log("For Testing !!!!!!!!!"+userOption)
-                                    }
-
+                                        {projectownUser.map(item => <Select.Option value={item.name} key={item.id}>{item.name}</Select.Option>)}
                                     </Select.OptGroup>
                                     <Select.OptGroup label="Other User">
-                                        <Select.Option key="Change" >Change User</Select.Option>
+                                        <Select.Option key="Change" >{changest ?  "Go Back to Owner User" : "Change User" }</Select.Option>
                                     </Select.OptGroup>
-
-
                                 </Select>
 
 
-                                {/* <Button onClick={showConfirm}>Confirm</Button> */}
 
                             </Form.Item>
-                            {/* <Form.Item>
-                                <Button onClick={showConfirm}>Confirm</Button>
-                            </Form.Item> */}
 
                             <Form.Item >
                                 <Button type="primary" htmlType="submit">
