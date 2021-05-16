@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'
 import './c_project.css';
-import { Layout, Form, Input, Button, Row, Col, Typography, Select, Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Layout, Form, Input, Button, Row, Col, Typography, Select, Modal ,Switch} from 'antd';
+import { ExclamationCircleOutlined ,CloseOutlined, CheckOutlined} from '@ant-design/icons';
 
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
@@ -16,22 +16,29 @@ const { Content } = Layout;
 
 const uuid = uuidv4();
 
-
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
+const projectGroup = [];
+for (let i = 10; i < 36; i++) {
+    projectGroup.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
 
 
 
 const submitHandler = (values) => {
     const axios = require('axios');
-    var subMitData = new Array();
+    var subMitData = [];
    
     subMitData.push(values.project);
     console.log(subMitData);
 
-    axios.post('/project/postsTest',
+    axios.post('/project/create',
         subMitData
     )
         .then(function (response) {
-            console.log("Testing :" + response);
+            console.log("Testing  :" + response);
             if (response.data.status === 0 && response.status === 200) {
                 console.log(response);
 
@@ -66,7 +73,7 @@ function Create_project() {
         if (value === 'Change' && changest === false) {
             showConfirm("other")
         }
-        if (value === 'Change' && changest == true) {
+        if (value === 'Change' && changest === true) {
             showConfirm("Back")
         }
 
@@ -163,7 +170,7 @@ function Create_project() {
                             </Form.Item>
                             <Form.Item
                                 label="Owner"
-                                name={['project', 'owner']}
+                                name={['project', 'master']}
                                 rules={[
                                     {
                                         required: true,
@@ -182,6 +189,70 @@ function Create_project() {
                                 </Select>
 
 
+
+                            </Form.Item>
+                            <Form.Item
+                                label="Project Group"
+                                name={['project', 'projectGroup']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please Select Project User',
+                                    },
+                                ]}
+
+                            >
+                                <Select
+                                    mode="multiple"
+                                    size="default"
+                                    placeholder="Please select"
+                                    // defaultValue={}
+                                    onChange={handleChange}
+                                    style={{ width: '100%' }}
+                                    >
+                                    {projectGroup}
+                                </Select>
+
+
+
+                            </Form.Item>
+                            <Form.Item
+                                label="Project User"
+                                name={['project', 'projectUser']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please Select Project User',
+                                    },
+                                ]}
+
+                            >
+                                <Select
+                                    mode="multiple"
+                                    size="default"
+                                    placeholder="Please select"
+                                    // defaultValue={}
+                                    onChange={handleChange}
+                                    style={{ width: '100%' }}
+                                    >
+                                    {children}
+                                </Select>
+
+
+
+                            </Form.Item>
+                            
+                            <Form.Item 
+                            label="Status"
+                            name={['project', 'projectStatus']}
+                            valuePropName="checked"
+                            initialValue = {true}
+                            >
+                            
+                            <Switch
+                                checkedChildren={<CheckOutlined />}
+                                unCheckedChildren={<CloseOutlined />}
+                            />
 
                             </Form.Item>
 
