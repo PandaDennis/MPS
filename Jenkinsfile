@@ -21,13 +21,7 @@ pipeline {
       }
       steps {
         echo 'Testing..'
-        sh 'set -x'
-        sh 'set +x'
-      }
-      steps {
-        echo 'Testing..'
         sh 'npm audit fix --force'
-        sh 'npm test'
       }
     }
 
