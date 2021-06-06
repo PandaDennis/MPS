@@ -21,7 +21,7 @@ pipeline {
       }
       steps {
         echo 'Testing..'
-        sh 'npm audit fix --force'
+       
       }
     }
 
