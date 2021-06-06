@@ -36,7 +36,4 @@ pipeline {
   tools {
     nodejs 'nodejs'
   }
-  environment {
-    DB_CONNEVTION = 'mongodb+srv://API_user:gBxQDOLQ6Grk4Tcw@testcluster0.xlaia.mongodb.net/MPS_DB?retryWrites=true&w=majority'
-  }
 }
