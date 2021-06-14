@@ -76,7 +76,7 @@ export class projectList extends Component {
                             project.length === 0 && project.status !== 0
                               ? <Spin />
                               : project.message.map(project => (
-                                <p>
+                                <div key={project.project_id.toString()}>
                                   <tr>
                                     <td rowSpan='2'>
                                       <Avatar.Group>
@@ -98,11 +98,11 @@ export class projectList extends Component {
                                   </tr>
                                   <tr>
                                     <td style={{ verticalAlign: 'top', paddingLeft: 15.5 }}>
-                                      <Text type="secondary">Dis</Text>
+                                      <Text type="secondary">{project.p_description}</Text>
                                     </td>
                                   </tr>
 
-                                </p>
+                                </div>
 
                               ))
 

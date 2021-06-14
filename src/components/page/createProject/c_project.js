@@ -10,6 +10,7 @@ const { confirm } = Modal;
 const { Option } = Select;
 const { Title } = Typography;
 const { Content } = Layout;
+const { TextArea } = Input;
 
 
 
@@ -54,8 +55,8 @@ const submitHandler = (values) => {
                     window.location = "../project";
                 });
 
-                
-                
+
+
 
             } else {
                 console.log("Error")
@@ -104,7 +105,6 @@ function Create_project() {
                     axios
                         .get('https://jsonplaceholder.typicode.com/comments?postId=1')
                         .then(res => {
-                            console.log("applwe(Test1): " + JSON.stringify(res.data))
                             setprojectownUser(res.data)
                             setchangest(true)
                         })
@@ -176,8 +176,14 @@ function Create_project() {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please input the Project Name, The Project name only Text and number ',
-                                        pattern: /^[A-Z a-z 0-9]+$/
+                                        message: 'Please input the Project Name',
+
+                                    },
+                                    {
+                                        required: true,
+                                        message: 'The Project name only Text and number and should be less than 50 character',
+                                        pattern: /^[A-Z a-z 0-9]{0,50}$/,
+
                                     },
                                 ]}
                             >
@@ -252,6 +258,21 @@ function Create_project() {
                                 >
                                     {children}
                                 </Select>
+
+
+
+                            </Form.Item>
+                            <Form.Item
+                                label="Description"
+                                name={['project', 'description']}
+                                rules={[
+                                    {
+                                        required: false,
+                                    },
+                                ]}
+
+                            >
+                                <TextArea allowClear />
 
 
 
