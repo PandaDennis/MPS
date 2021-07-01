@@ -75,38 +75,39 @@ export class projectList extends Component {
                           {
                             project.length === 0 && project.status !== 0
                               ? <Spin />
-                              : project.message.map(project => (
-                                <div key={project.project_id.toString()}>
-                                  <tr>
-                                    <td rowSpan='2'>
-                                      <Avatar.Group>
-                                        <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                        <Avatar
-                                          style={{
-                                            backgroundColor: '#f56a00',
-                                          }}
-                                        >
-                                          K
-                                        </Avatar>
-                                      </Avatar.Group>
-                                    </td>
-                                    <td style={{ verticalAlign: 'top', paddingLeft: 15.5, }}>
-                                      <a href='www.google.com'>
-                                        {project.project_name}
-                                      </a>
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td style={{ verticalAlign: 'top', paddingLeft: 15.5 }}>
-                                      <Text type="secondary">{project.p_description}</Text>
-                                    </td>
-                                  </tr>
+                              : project.message.map(function (project,index){
+                                return ([
+                                <tr key={index}>
+                                  <td rowSpan='2' style={{width:'80px'}}>
+                                  <Avatar.Group>
+                                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                     <Avatar
+                                      style={{
+                                        backgroundColor: '#f56a00',
+                                      }}
+                                    >
+                                      K
+                                    </Avatar>
+                                  </Avatar.Group>
+                                  </td>
+                                   <td style={{verticalAlign:'top'}}>
+                                     <a  href='www.google.com'>
+                                     {project.project_name}
+                                     </a>
+                                   </td>
+                              </tr>,
+                              <tr key={index+1}>
+                                    <td style={{verticalAlign:'top'}}>
+                                     <Text type="secondary">Dis</Text>
+                                     </td>
+                               </tr>
+                               ]);
+                              }
 
-                                </div>
-
-                              ))
+                              )
 
                           }
+                        
                         </tbody>
                       </table>
 

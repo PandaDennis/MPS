@@ -34,7 +34,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "http://10.0.0.103:4083/",
+  "proxy": "http://127.0.0.1:4083/",
   "browserslist": [
     ">0.3%",
     "not ie 11",
