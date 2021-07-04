@@ -91,7 +91,7 @@ export class projectList extends Component {
                                   </Avatar.Group>
                                   </td>
                                    <td style={{verticalAlign:'top'}}>
-                                     <a  href='www.google.com'>
+                                     <a href={'/project/main/' + project.project_id}>
                                      {project.project_name}
                                      </a>
                                    </td>
