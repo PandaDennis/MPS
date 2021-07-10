@@ -5,7 +5,7 @@ import P_list from "./page/projectList/ProjectList"
 import P_page from "./page/projectPage_c/projectPage"
 
 // DEBUG
-import P_tree from "./page/projectPage_c/projectTree"
+// import P_tree from "./page/projectPage_c/projectTree"
 import {Switch, Route} from 'react-router-dom';
 
 
@@ -21,7 +21,7 @@ function project_management() {
         <Route path="/project/create" component={P_create} />
         <Route path="/project/main/:projectId" component={P_page} />
 
-        <Route path="/project/tree" component={P_tree} />
+        {/* <Route path="/project/tree" component={P_tree} /> */}
       </Switch>
            
       
