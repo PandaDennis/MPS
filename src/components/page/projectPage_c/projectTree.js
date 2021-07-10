@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { Tree } from 'antd';
 import { ContainerOutlined} from '@ant-design/icons';
